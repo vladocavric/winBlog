@@ -1,0 +1,8 @@
+<h1>this is edit form for blog</h1>
+
+<form action="/blog/<%= blog._id%>/edit" method="get">
+    <input type="text" name="title" id="title" placeholder="Title" value="<%= blog.title %>">
+    <input type="text" name="pictureURL" id="pictureURL" placeholder="Picture URL" value="<%= blog.picture %>">
+    <textarea name="body" id="body" cols="30" rows="10"><%= blog.body %></textarea>
+    <input type="submit" value="submit">
+</form>

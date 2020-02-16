@@ -8,31 +8,32 @@ const express    = require('express'),
 mongoose.connect('mongodb://localhost:27017/winBlog', {useNewUrlParser: true, useUnifiedTopology: true});
 
 const blog = mongoose.model('blog', {
-    title: String,
-    picture: String,
+    title: {type: String, default: 'blog title'},
+    picture: {type: String, default: '/dummy.jpg'},
     body: String,
-    date: Date
+    date: {type: Date, default: Date.now}
 });
 
 app.use(express.static('themes'));
 app.use(bodyParser.urlencoded({extend: true}));
 app.set('view engine', 'ejs');
 
+//restful routes
 app.get('/', function (req, res) {
-    res.render('home')
+    res.redirect('/blogs');
 });
 
-app.get('/blog', function (req, res) {
+app.get('/blogs', function (req, res) {
     blog.find({}, function (err, blog) {
         if(err){
             console.log(err);
         } else {
-            res.render('blog/index', {blog: blog})
+            res.render('blogs/index', {blog: blog})
         }
     })
 });
 
-app.post('/blog', function (req, res) {
+app.post('/blogs', function (req, res) {
     let title = req.body.title;
     let picture = req.body.pictureURL;
     let body = req.body.body;
@@ -44,41 +45,74 @@ app.post('/blog', function (req, res) {
         date: date
     };
 
-    blog.create(dataForDB, function (err, blog) {
+    blog.create(dataForDB, function (err, blogs) {
         if (err) {
             console.log(err);
         } else {
             // console.log(blog);
+            console.log(dataForDB)
         }
     });
-    res.redirect('blog')
+    res.redirect('/blogs')
 });
 
-app.get('/blog/new', function (req, res) {
-    res.render('blog/addblog')
+app.get('/blogs/new', function (req, res) {
+    res.render('blogs/addblog')
 });
 
-app.get('/blog/:id', function (req, res) {
+app.get('/blogs/:id', function (req, res) {
     let id = req.params.id;
     blog.findById(id, function (err, foundBlog) {
         if(err) {
             console.log(err);
         } else {
-            res.render('blog/show', {blog: foundBlog})
+            res.render('blogs/show', {blog: foundBlog})
         }
     });
 });
 
-app.delete('/blog/:id', function (req, res) {
-    let id = req.params.id;
-    blog.deleteOne({ id: id }, function (err, foundBlog) {
-        if(err) {
-            console.log(err);
-        } else {
-            res.render('blog/index', {blog: foundBlog})
-        }
-    });
-});
+// app.get('/blogs/:id/edit', function (req, res) {
+//     let id = req.params.id;
+//     let title = req.body.title;
+//     let picture = req.body.pictureURL;
+//     let body = req.body.body;
+//     // let date = new Date();
+//     let dataForDB = {
+//         title: title,
+//         picture: picture,
+//         body: body,
+//         date: date
+//     };
+//     blog.findById(id, function (err, foundBlog) {
+//         if(err) {
+//             console.log(err);
+//         } else {
+//             res.render('blogs/edit', {blog: foundBlog})
+//         }
+//     });
+//     blog.updateOne({id: id}, dataForDB, function (err, blog) {
+//         if (err) {
+//             console.log(err);
+//         } else {
+//             // console.log(blog);
+//             res.redirect('blogs/show')
+//         }
+//     });
+//
+// });
+
+// app.delete('/blogs/:id', function (req, res) {
+//     let id = req.params.id;
+//     blog.deleteOne({ id: id }, function (err, foundBlog) {
+//         if(err) {
+//             console.log('this is en error')
+//             console.log(err);
+//         } else {
+//             console.log(blog.id)
+//             res.render('blogs/index', {blog: foundBlog})
+//         }
+//     });
+// });
 
 app.get('*', function (req, res) {
     res.send('404')
