@@ -1,14 +1,15 @@
-<%- include('../partials/header')%>
-<%- include('../partials/nav')%>
+<%- include('../partials/header') %>
+<%- include('../partials/nav') %>
 <h1>this is blog </h1>
 
 <% blog.forEach(blog => { %>
     <div style="display: inline-block; width: 30%; text-align: center; margin: 1.5%;">
-        <a href="/blogs/<%= blog._id%>">
+        <a href="/blogs/<%= blog._id %>">
             <img src="<%= blog.picture %> " alt="blog picture" style="max-width: 100%">
             <h3><%= blog.title %> </h3>
-            <span><%= blog.date %></span>
+            <span><%= moment(blog.date).format('D.M.YYYY') %></span>
         </a>
     </div>
 <% }) %>
-<%- include('../partials/footer')%>
+<%- include('../partials/footer') %>
+

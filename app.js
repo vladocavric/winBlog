@@ -1,9 +1,10 @@
-const express    = require('express'),
-      app        = express(),
-      bodyParser = require('body-parser'),
-      request    = require('request'),
-      rp         = require('request-promise'),
-      mongoose   = require('mongoose');
+const express = require('express'),
+    app = express(),
+    bodyParser = require('body-parser'),
+    request = require('request'),
+    rp = require('request-promise'),
+    mongoose = require('mongoose'),
+    moment = require('moment');
 
 mongoose.connect('mongodb://localhost:27017/winBlog', {useNewUrlParser: true, useUnifiedTopology: true});
 
@@ -25,45 +26,45 @@ app.get('/', function (req, res) {
 
 app.get('/blogs', function (req, res) {
     blog.find({}, function (err, blog) {
-        if(err){
+        if (err) {
             console.log(err);
         } else {
-            res.render('blogs/index', {blog: blog})
+            res.render('blogs/index', {blog: blog, moment: moment})
         }
     })
 });
 
-app.post('/blogs', function (req, res) {
-    let title = req.body.title;
-    let picture = req.body.pictureURL;
-    let body = req.body.body;
-    let date = new Date();
-    let dataForDB = {
-        title: title,
-        picture: picture,
-        body: body,
-        date: date
-    };
+app.get('/blogs/new', function (req, res) {
+    res.render('blogs/addblog', {moment: moment})
+});
 
-    blog.create(dataForDB, function (err, blogs) {
+app.post('/blogs', function (req, res) {
+    // let title = req.body.title;
+    // let picture = req.body.pictureURL;
+    // let body = req.body.body;
+    // let date = new Date();
+    // let dataForDB = {
+    //     title: title,
+    //     picture: picture,
+    //     body: body,
+    //     date: date
+    // };
+
+    blog.create(req.body.blog, function (err, blogs) {
         if (err) {
             console.log(err);
         } else {
             // console.log(blog);
-            console.log(dataForDB)
+            // console.log(dataForDB)
         }
     });
     res.redirect('/blogs')
 });
 
-app.get('/blogs/new', function (req, res) {
-    res.render('blogs/addblog')
-});
-
 app.get('/blogs/:id', function (req, res) {
     let id = req.params.id;
     blog.findById(id, function (err, foundBlog) {
-        if(err) {
+        if (err) {
             console.log(err);
         } else {
             res.render('blogs/show', {blog: foundBlog})
