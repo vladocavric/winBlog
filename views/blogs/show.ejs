@@ -1,10 +1,14 @@
-<%- include('../partials/header')%>
-<%- include('../partials/nav')%>
-<h1><%= blog.title %></h1>
-<p><%= blog.body %></p>
-<img src="<%= blog.picture %>" alt="<%= blog.title %>">
-<br>
-<a href="/blog/<%= blog._id%>/edit">edit ></a>
-<%- include('partials/deleteForm')%>
+<%- include('../partials/header') %>
+<%- include('../partials/nav') %>
+<div class="ui main text container segment ">
 
-<%- include('../partials/footer')%>
+    <h1 class="ui huge header"><%= blog.title %></h1>
+    <p><%= blog.body %></p>
+    <p><%= blog.date.toDateString() %></p>
+    <img class="ui centered rounded image" src="<%= blog.picture %>" alt="<%= blog.title %>">
+    <a class="ui button yellow" href="/blogs/<%= blog._id %>/edit">Edit ></a>
+    <%- include('partials/deleteForm') %>
+</div>
+
+
+<%- include('../partials/footer') %>

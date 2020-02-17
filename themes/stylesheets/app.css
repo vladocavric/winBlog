@@ -12,7 +12,14 @@
     margin: auto;
 }
 
-
-
+.main form {
+    display: inline;
 }
 
+img {
+    margin-bottom: 10px;
+}
+
+.listing-blog-text {
+    text-align: left;
+}

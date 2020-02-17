@@ -2,12 +2,20 @@
 <%- include('../partials/nav') %>
 <h1>this is blog </h1>
 
-<% blog.forEach(blog => { %>
+<% blog.reverse().forEach(blog => { %>
     <div style="display: inline-block; width: 30%; text-align: center; margin: 1.5%;">
         <a href="/blogs/<%= blog._id %>">
             <img src="<%= blog.picture %> " alt="blog picture" style="max-width: 100%">
             <h3><%= blog.title %> </h3>
+            <p class="listing-blog-text"><%= blog.body.substring(0, 100) %>
+                <% if (blog.body.length > 100) { %>
+                    <span>...</span>
+                <% } else { %>
+                <% } %>
+            </p>
             <span><%= moment(blog.date).format('D.M.YYYY') %></span>
+            <br>
+            <a href="/blogs/<%= blog._id %>">Read More</a>
         </a>
     </div>
 <% }) %>

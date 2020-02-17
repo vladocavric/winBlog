@@ -1,0 +1,17 @@
+<form action="/blogs/<%= blog._id%>?_method=PUT" method="post" class="ui form">
+    <div class="field">
+        <lable>Title</lable>
+        <input type="text" name="blog[title]" id="title" placeholder="Title" value="<%= blog.title %>">
+    </div>
+    <div class="field">
+        <lable>Picture UR</lable>
+        <input type="text" name="blog[picture]" id="picture" placeholder="Picture URL" value="<%= blog.picture %>">
+    </div>
+    <div class="field">
+        <lable>blog post goes here</lable>
+        <textarea name="blog[body]" id="body" cols="30" rows="10" placeholder="blog post goes here" required><%= blog.body %></textarea>
+    </div>
+    <div class="field">
+        <input class="ui basic green button" type="submit" value="submit">
+    </div>
+</form>
