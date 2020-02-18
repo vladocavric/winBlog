@@ -5,6 +5,7 @@ const express = require('express'),
     rp = require('request-promise'),
     mongoose = require('mongoose'),
     methodOverride = require('method-override'),
+    expressSanitizer= require('express-sanitizer'),
     moment = require('moment');
 
 mongoose.connect('mongodb://localhost:27017/winBlog', {useNewUrlParser: true, useUnifiedTopology: true});
@@ -18,8 +19,9 @@ const blog = mongoose.model('blog', {
 
 app.use(express.static('themes'));
 app.use(bodyParser.urlencoded({extend: true}));
-app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
+app.use(expressSanitizer());
+app.set('view engine', 'ejs');
 
 //restful routes
 app.get('/', function (req, res) {
@@ -43,6 +45,7 @@ app.get('/blogs/new', function (req, res) {
 });
 
 app.post('/blogs', function (req, res) {
+    req.body.blog.body = req.sanitize(req.body.blog.body)
     blog.create(req.body.blog, function (err, blogs) {
         if (err) {
             console.log(err);
@@ -66,7 +69,6 @@ app.get('/blogs/:id', function (req, res) {
 app.get('/blogs/:id/edit', function (req, res) {
     console.log(req.body.blog);
     blog.findById(req.params.id, function (err, foundBlog) {
-
         if (err) {
             console.log(err);
         } else {
@@ -76,6 +78,7 @@ app.get('/blogs/:id/edit', function (req, res) {
 });
 
 app.put('/blogs/:id', function (req, res) {
+    req.body.blog.body = req.sanitize(req.body.blog.body)
     blog.findByIdAndUpdate(req.params.id, req.body.blog, function (err, blog) {
         if (err) {
             console.log(err);
